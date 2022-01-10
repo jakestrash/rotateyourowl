@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			#container{
+				display:flex;
+				justify-content:center;
+				align-items:center;
+				height:100vh;
+				width:100%;
+				position:relative;
+			}
+			#body{
+				position:absolute;
+				width:225px;
+				height:355px;
+				top:100px;
+				z-index: -1;
+			}
+			body, html{
+				margin:0;
+				padding:0;
+			}
+			*{
+				box-sizing:border-box;
+			}
+			h1{
+				font-family:impact;
+				font-size:70px;
+				position:absolute;
+				bottom:100px;
+			}
+			
+			@keyframes cycle{
+				0% {color:red;}
+				20% {color:orange;}
+				40% {color:yellow;}
+				60% {color:green;}
+				80% {color:blue;}
+				100% {color:red;}
+			}
+			
+			h1:hover{
+				animation-name:cycle;
+				animation-duration:1s;
+				animation-iteration-count: infinite;
+			}
+		</style>
+	</head>
+	<body>
+		<button onclick="onClick();" id="ios13fix">Enable Gyroscope</button>
+		<div id="container">
+		<h1>ROTATE YOUR OWL</h1>
+			<img src="assets/owl_head.png" style="width:384px;height:307px;position:absolute;top:0px;">
+			<img id="body" src="assets/owl_body.png">
+		</div>
+		<script>
+			var container = document.getElementById("container");
+			var body = document.getElementById("body");
+			document.body.addEventListener("mousemove",function(e){
+				rot = (((e.clientX)-956)*-1)*0.1
+				body.style.transform = 'rotate('+rot+'deg)';
+			})
+			
+			window.addEventListener('deviceorientation', handleOrientation);
+			
+			if ( location.protocol != "https:" ) {
+location.href = "https:" + window.location.href.substring( window.location.protocol.length );
+}
+		function permission () {
+			if ( typeof( DeviceMotionEvent ) !== "undefined" && typeof( DeviceMotionEvent.requestPermission ) === "function" ) {
+				// (optional) Do something before API request prompt.
+				DeviceMotionEvent.requestPermission()
+					.then( response => {
+					// (optional) Do something after API prompt dismissed.
+					if ( response == "granted" ) {
+						window.addEventListener( "devicemotion", (e) => {
+							window.addEventListener('deviceorientation', handleOrientation);
+						})
+					}
+				})
+					.catch( console.error )
+			} else {
+				alert( "DeviceMotionEvent is not defined" );
+			}
+}
+const btn = document.getElementById( "ios13fix" );
+btn.addEventListener( "click", permission );
+
+			function handleOrientation(event) {
+			  const alpha = event.alpha;
+			  const beta = event.beta;
+			  const gamma = event.gamma;
+			  rot = ((alpha)*-1)/2
+			  body.style.transform = 'rotate('+alpha+'deg)';
+			}
+			
+			document.getElementsByTagName("h1")[0].addEventListener("click",function(){
+				window.open("https://www.youtube.com/watch?v=9hBpF_Zj4OA");
+			})
+		</script>
+	</body>
+</html>	
